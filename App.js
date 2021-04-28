@@ -12,7 +12,7 @@ const App = () => {
     <NavigationContainer>
       <AppStack.Navigator>
         <AppStack.Screen name='Onboarding' component={OnboardingScreen} />
-        <AppStack.Screen name='Home' component={HomeScreen} />
+        <AppStack.Screen name='Home' component={HomeScreen} options={{ title: 'CoIdea' }} />
       </AppStack.Navigator>
     </NavigationContainer>
   );
