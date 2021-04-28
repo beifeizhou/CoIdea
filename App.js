@@ -14,10 +14,7 @@ const App = () => {
         <AppStack.Screen name='Onboarding' component={OnboardingScreen} />
         <AppStack.Screen name='Home' component={HomeScreen} />
       </AppStack.Navigator>
-
     </NavigationContainer>
-    // <OnboardingScreen />
-    // <HomeScreen />
   );
 }
 
