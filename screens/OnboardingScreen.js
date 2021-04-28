@@ -47,14 +47,16 @@ const Done = ({ ...props }) => (
     </TouchableOpacity>
 );
 
-const OnboardingScreen = () => {
+const OnboardingScreen = ({ navigation }) => {
     return (
         <Onboarding
             SkipButtonComponent={Skip}
             NextButtonComponent={Next}
             DoneButtonComponent={Done}
             DotComponent={Dots}
-            imageContainerStyles={{ paddingTop: 0, flex: 0.6, justifyContent: 'flex-end', }}
+            onSkip={() => navigation.replace("Home")}
+            onDone={() => navigation.replace("Home")}
+            imageContainerStyles={{ paddingTop: 0, flex: 0.5, justifyContent: 'flex-end', }}
             pages={
                 [
                     {
@@ -68,14 +70,7 @@ const OnboardingScreen = () => {
                         image: <Image style={styles.image} source={require('../assets/logo.png')} />,
                         title: 'How it works',
                         subtitle: 'Background, timeline, research, roadmap',
-                    },
-                    {
-                        backgroundColor: '#fff',
-                        image: <Image style={styles.image} source={require('../assets/logo.png')} />,
-                        title: 'How it works',
-                        subtitle: 'Background, timeline, research, roadmap',
-                    },
-
+                    }
                 ]}
         />
     )
