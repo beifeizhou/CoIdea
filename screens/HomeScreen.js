@@ -21,9 +21,18 @@ const list = [
     }
 ]
 
-const log = () => {
-    console.log('Press the button')
+const clickNav = ({ title, navigation }) => {
+    switch (title) {
+        case "Background":
+            navigation.navigate('Background');
+            break;
+        default:
+            navigation.navigate('Background');
+    }
 }
+
+const clickNavTest = ({ navigation }) => { navigation.navigate('Background') }
+
 
 const HomeScreen = ({ navigation }) => {
     return (
@@ -34,11 +43,17 @@ const HomeScreen = ({ navigation }) => {
                     <ListItem.Content>
                         <ListItem.Title>{item.title}</ListItem.Title>
                     </ListItem.Content>
-                    {/* <ListItem.Chevron /> */}
-                    <Icon name='description' onPress={log} />
-                </ListItem>
-            ))
-            }
+                    <Icon name='description'
+                        onPress={() => {
+                            switch (item.title) {
+                                case "Background":
+                                    navigation.navigate('Background');
+                                    break;
+                                default:
+                                    navigation.navigate('Demo');
+                            }
+                        }} />
+                </ListItem>))}
         </View>
     )
 }

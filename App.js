@@ -4,6 +4,8 @@ import OnboardingScreen from './screens/OnboardingScreen'
 import HomeScreen from './screens/HomeScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
+import Background from './screens/Background'
+import Demo from './screens/Demo'
 
 const AppStack = createStackNavigator();
 
@@ -13,6 +15,8 @@ const App = () => {
       <AppStack.Navigator>
         <AppStack.Screen name='Onboarding' component={OnboardingScreen} />
         <AppStack.Screen name='Home' component={HomeScreen} options={{ title: 'CoIdea' }} />
+        <AppStack.Screen name='Background' component={Background} />
+        <AppStack.Screen name='Demo' component={Demo} />
       </AppStack.Navigator>
     </NavigationContainer>
   );
