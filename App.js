@@ -17,8 +17,8 @@ const App = () => {
         <AppStack.Screen name='Onboarding' component={OnboardingScreen} />
         <AppStack.Screen name='Home' component={HomeScreen} options={{ title: 'CoIdea' }} />
         <AppStack.Screen name='Background' component={Background} />
-        <AppStack.Screen name='TimelineScreen' component={TimelineScreen} />
-        <AppStack.Screen name='Demo' component={Demo} />
+        <AppStack.Screen name='TimelineScreen' component={TimelineScreen} options={{ title: 'Timeline' }} />
+        <AppStack.Screen name='Demo' component={Demo} options={{ title: 'Research' }} />
       </AppStack.Navigator>
     </NavigationContainer>
   );
