@@ -2,12 +2,12 @@ import React from 'react'
 import { View, Text } from 'react-native'
 import { Header, Button } from 'react-native-elements'
 
-const Background = ({ navigation }) => {
+const Demo = ({ navigation }) => {
     return (
         <View>
-            <Text>This is background!</Text>
+            <Text>This is a demo</Text>
         </View>
     )
 }
 
-export default Background;
+export default Demo;
