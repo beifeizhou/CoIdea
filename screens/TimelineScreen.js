@@ -1,6 +1,6 @@
 import React from 'react'
 import Timeline from 'react-native-timeline-flatlist'
-import View from 'react-native'
+import { View, StyleSheet } from 'react-native'
 
 const placeholders = [
     { time: '09:00', title: 'Event 1', description: 'Event 1 Description' },
@@ -20,8 +20,12 @@ const TimelineScreen = () => {
             timeStyle={{ textAlign: 'center', backgroundColor: '#ff9797', color: 'white', padding: 5, borderRadius: 13 }}
             descriptionStyle={{ color: 'gray' }}
             options={{
-                style: { paddingTop: 5 }
-            }}>
+                style: {
+                    paddingTop: 20,
+                    paddingLeft: 20,
+                }
+            }}
+        >
         </Timeline>
     )
 }
