@@ -46,8 +46,11 @@ const HomeScreen = ({ navigation }) => {
                     <Icon name='description'
                         onPress={() => {
                             switch (item.title) {
-                                case "Background":
+                                case 'Background':
                                     navigation.navigate('Background');
+                                    break;
+                                case 'Timeline':
+                                    navigation.navigate('TimelineScreen');
                                     break;
                                 default:
                                     navigation.navigate('Demo');
