@@ -43,19 +43,19 @@ const HomeScreen = ({ navigation }) => {
                     <ListItem.Content>
                         <ListItem.Title>{item.title}</ListItem.Title>
                     </ListItem.Content>
-                    <Icon name='description'
-                        onPress={() => {
-                            switch (item.title) {
-                                case 'Background':
-                                    navigation.navigate('Background');
-                                    break;
-                                case 'Timeline':
-                                    navigation.navigate('TimelineScreen');
-                                    break;
-                                default:
-                                    navigation.navigate('Demo');
-                            }
-                        }} />
+                    <ListItem.Chevron onPress={() => {
+                        switch (item.title) {
+                            case 'Background':
+                                navigation.navigate('Background');
+                                break;
+                            case 'Timeline':
+                                navigation.navigate('TimelineScreen');
+                                break;
+                            default:
+                                navigation.navigate('Demo');
+                        }
+                    }}
+                    />
                 </ListItem>))}
         </View>
     )
