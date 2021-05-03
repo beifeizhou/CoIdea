@@ -20,18 +20,6 @@ const TimelineScreen = () => {
             .then(data => { setEvents(data) })
     }, [])
 
-    const addTask = async (task) => {
-        const res = await fetch('http://localhost:5000/tasks', {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify(task)
-        })
-        const data = await res.json()
-        setTasks([...tasks, data])
-    }
-
     // Display the overlay Input
     const [visible, setVisible] = useState(false);
 
@@ -39,15 +27,33 @@ const TimelineScreen = () => {
         setVisible(!visible);
     };
 
+    // Add event to db
+    const addEvent = async (event) => {
+        const res = await fetch('http://localhost:5000/events', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(event)
+        })
+        const data = await res.json()
+        setEvents([...events, data])
+    }
+
+    const [time, onChangeTime] = useState('')
+    const [title, onChangeTitle] = useState('')
+    const [description, onChangeDescription] = useState('')
 
     return (
-
         <View style={styles.container}>
-
             <Icon name="add" color="blue" size='30' onPress={toggleOverlay} />
             <Overlay isVisible={visible} overlayStyle={styles.overlay} onBackdropPress={toggleOverlay} >
-                <Input placeholder='Time' />
-                <Input placeholder='Title' />
+                <Input placeholder='Time'
+                    onChangeText={onChangeTime}
+                    value={time} />
+                <Input placeholder='Title'
+                    onChangeText={onChangeTitle}
+                    value={title} />
                 <Input
                     style={styles.textArea}
                     underlineColorAndroid="transparent"
@@ -55,8 +61,10 @@ const TimelineScreen = () => {
                     placeholderTextColor="grey"
                     numberOfLines={10}
                     multiline={true}
+                    onChangeText={onChangeDescription}
+                    value={description}
                 />
-                <Button title='Done' onPress={toggleOverlay} />
+                <Button title='Done' />
             </Overlay>
             <Timeline data={events}
                 circleSize={20}
