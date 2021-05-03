@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Timeline from 'react-native-timeline-flatlist'
-import { View, StyleSheet, Text, TextInput } from 'react-native'
-import { Button, Icon } from 'react-native-elements'
+import { View, StyleSheet, TextInput } from 'react-native'
+import { Button, Icon, Overlay, Input } from 'react-native-elements'
 
 // const placeholders = [
 //     { time: '09:00', title: 'Event 1', description: 'Event 1 Description' },
@@ -20,10 +20,6 @@ const TimelineScreen = () => {
             .then(data => { setEvents(data) })
     }, [])
 
-    const addEvent = () => {
-        alert('You tapped the button!')
-    }
-
     const addTask = async (task) => {
         const res = await fetch('http://localhost:5000/tasks', {
             method: 'POST',
@@ -36,11 +32,32 @@ const TimelineScreen = () => {
         setTasks([...tasks, data])
     }
 
+    // Display the overlay Input
+    const [visible, setVisible] = useState(false);
+
+    const toggleOverlay = () => {
+        setVisible(!visible);
+    };
+
+
     return (
 
         <View style={styles.container}>
 
-            <Icon name="add" color="blue" size='30' />
+            <Icon name="add" color="blue" size='30' onPress={toggleOverlay} />
+            <Overlay isVisible={visible} overlayStyle={styles.overlay} onBackdropPress={toggleOverlay} >
+                <Input placeholder='Time' />
+                <Input placeholder='Title' />
+                <Input
+                    style={styles.textArea}
+                    underlineColorAndroid="transparent"
+                    placeholder="Description"
+                    placeholderTextColor="grey"
+                    numberOfLines={10}
+                    multiline={true}
+                />
+                <Button title='Done' onPress={toggleOverlay} />
+            </Overlay>
             <Timeline data={events}
                 circleSize={20}
                 circleColor='rgb(45,156,219)'
@@ -65,5 +82,14 @@ export default TimelineScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    overlay: {
+        flex: 0.5,
+        width: '80%',
+        height: '80%',
+    },
+    textArea: {
+        height: 150,
+        justifyContent: "flex-start"
     }
 });
