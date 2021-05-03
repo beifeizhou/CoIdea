@@ -3,14 +3,6 @@ import Timeline from 'react-native-timeline-flatlist'
 import { View, StyleSheet, TextInput } from 'react-native'
 import { Button, Icon, Overlay, Input } from 'react-native-elements'
 
-// const placeholders = [
-//     { time: '09:00', title: 'Event 1', description: 'Event 1 Description' },
-//     { time: '10:45', title: 'Event 2', description: 'Event 2 Description' },
-//     { time: '12:00', title: 'Event 3', description: 'Event 3 Description' },
-//     { time: '14:00', title: 'Event 4', description: 'Event 4 Description' },
-//     { time: '16:30', title: 'Event 5', description: 'Event 5 Description' }
-// ]
-
 const TimelineScreen = () => {
     const [events, setEvents] = useState([])
 
@@ -27,7 +19,7 @@ const TimelineScreen = () => {
         setVisible(!visible);
     };
 
-    // Add event to db
+    // ??? Need to check how to add event to db
     const addEvent = async (event) => {
         const res = await fetch('http://localhost:5000/events', {
             method: 'POST',
@@ -46,7 +38,7 @@ const TimelineScreen = () => {
 
     return (
         <View style={styles.container}>
-            <Icon name="add" color="blue" size='30' onPress={toggleOverlay} />
+            <Icon name="add" color="blue" size={30} onPress={toggleOverlay} />
             <Overlay isVisible={visible} overlayStyle={styles.overlay} onBackdropPress={toggleOverlay} >
                 <Input placeholder='Time'
                     onChangeText={onChangeTime}
