@@ -2,9 +2,14 @@ import React, { useState, useEffect } from 'react'
 import Timeline from 'react-native-timeline-flatlist'
 import { View, StyleSheet, TextInput } from 'react-native'
 import { Button, Icon, Overlay, Input } from 'react-native-elements'
+import { v4 as uuidv4 } from 'uuid'
+import { event } from 'react-native-reanimated'
 
 const TimelineScreen = () => {
     const [events, setEvents] = useState([])
+    const [time, onChangeTime] = useState('')
+    const [title, onChangeTitle] = useState('')
+    const [description, onChangeDescription] = useState('')
 
     useEffect(() => {
         fetch('http://localhost:5000/events')
@@ -19,22 +24,24 @@ const TimelineScreen = () => {
         setVisible(!visible);
     };
 
-    // ??? Need to check how to add event to db
-    const addEvent = async (event) => {
-        const res = await fetch('http://localhost:5000/events', {
+    // Add event
+    const addEvent = (time, title, description) => {
+        const newEvent = {
+            "id": uuidv4(),
+            "time": time,
+            "title": title,
+            "description": description
+        }
+        fetch('http://localhost:5000/events', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
             },
-            body: JSON.stringify(event)
+            body: JSON.stringify(newEvent)
         })
-        const data = await res.json()
-        setEvents([...events, data])
+        setEvents([...events, newEvent])
+        setVisible(!visible)
     }
-
-    const [time, onChangeTime] = useState('')
-    const [title, onChangeTitle] = useState('')
-    const [description, onChangeDescription] = useState('')
 
     return (
         <View style={styles.container}>
@@ -56,7 +63,7 @@ const TimelineScreen = () => {
                     onChangeText={onChangeDescription}
                     value={description}
                 />
-                <Button title='Done' />
+                <Button title='Done' onPress={() => addEvent(time, title, description)} />
             </Overlay>
             <Timeline data={events}
                 circleSize={20}
