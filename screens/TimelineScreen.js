@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Timeline from 'react-native-timeline-flatlist'
-import { View, StyleSheet, TextInput } from 'react-native'
-import { Button, Icon, Overlay, Input } from 'react-native-elements'
+import { View, StyleSheet, TextInput, Alert } from 'react-native'
+import { Button, Icon, Overlay, Input, Text } from 'react-native-elements'
 import { v4 as uuidv4 } from 'uuid'
 import { event } from 'react-native-reanimated'
 
@@ -24,6 +24,13 @@ const TimelineScreen = () => {
         setVisible(!visible);
     };
 
+    const [eventVisible, setEventVisible] = useState(false)
+    const toggleEventOverlay = (event) => {
+        console.log(eventVisible)
+        setEventVisible(!eventVisible);
+        console.log(eventVisible)
+    };
+
     // Add event
     const addEvent = (time, title, description) => {
         const newEvent = {
@@ -41,6 +48,25 @@ const TimelineScreen = () => {
         })
         setEvents([...events, newEvent])
         setVisible(!visible)
+    }
+
+    const deleletEvent = (id) => {
+        fetch(`http://localhost:5000/events/${id}`, { method: 'DELETE' })
+        setEvents(events.filter((each) => each.id != id))
+    }
+
+    const editDelete = (event) => {
+        const id = event.id
+        Alert.alert(
+            "Edit or delete this event",
+            "",
+            [
+                { text: "Edit", onPress: () => console.log('todo'), },
+                { text: "Delete", onPress: () => deleletEvent(id) },
+                { text: "Cancel", style: 'cancel' }
+            ],
+            { cancelable: false }
+        );
     }
 
     return (
@@ -77,7 +103,9 @@ const TimelineScreen = () => {
                         paddingTop: 20,
                         paddingLeft: 20,
                     }
-                }}
+                }
+                }
+                onEventPress={(event) => editDelete(event)}
             >
             </Timeline>
         </View>
@@ -94,6 +122,10 @@ const styles = StyleSheet.create({
         flex: 0.5,
         width: '80%',
         height: '80%',
+    },
+    eventOverlay: {
+        flex: 0.5,
+        width: '50%'
     },
     textArea: {
         height: 150,
