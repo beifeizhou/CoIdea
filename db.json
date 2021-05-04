@@ -1,12 +1,6 @@
 {
   "events": [
     {
-      "id": "1",
-      "time": "09:00",
-      "title": "Event 1",
-      "description": "Data from db.json"
-    },
-    {
       "id": "2",
       "time": "10:45",
       "title": "Event 2",
@@ -31,22 +25,16 @@
       "description": "Event 5 Description"
     },
     {
-      "id": "0fe93d12-3bbe-4bd7-a341-ac8e0d5afd14",
-      "time": "6",
-      "title": "6",
-      "description": "6"
-    },
-    {
-      "id": "e28e80a5-ae9d-4865-bdd8-37cfbda84350",
-      "time": "21:14",
-      "title": "Delete",
-      "description": "How to delete an event"
-    },
-    {
       "id": "ec580109-d7d8-411c-8e4d-87990bbec458",
       "time": "21:38",
       "title": "Delete Event not Valid",
       "description": "Currently still don’t know how to add delete button"
+    },
+    {
+      "id": "11a334a5-8817-4173-bcc3-44782a4e735b",
+      "time": "09:08",
+      "title": "Morning",
+      "description": "It is morning now"
     }
   ]
 }
