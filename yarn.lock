@@ -2698,6 +2698,11 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
+classnames@^2.2.6:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.3.1.tgz#dfcfa3891e306ec1dad105d0e88f4417b8535e8e"
+  integrity sha512-OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA==
+
 cli-boxes@^2.2.1:
   version "2.2.1"
   resolved "https://registry.npmjs.org/cli-boxes/-/cli-boxes-2.2.1.tgz"
@@ -6097,6 +6102,18 @@ react-dom@16.13.1:
     prop-types "^15.6.2"
     scheduler "^0.19.1"
 
+react-edit-text@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/react-edit-text/-/react-edit-text-4.0.3.tgz#87c25fe9b3141e0e04172435d1fed048b76781f3"
+  integrity sha512-z8DoPkeUhkPjdCuCIs2YH7xz2HDX9uZ5a3jaUH1Pt0Dt6cPH3HQi5yz/z6URwhBRdPeYcZj9qWqZj6TxzK6eJA==
+  dependencies:
+    classnames "^2.2.6"
+
+react-editext@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/react-editext/-/react-editext-4.1.0.tgz#66e4daf4b33de9972f725bbd15ab80248bc45987"
+  integrity sha512-W3B5tlyzUsrSspJnajRs31gxWFkJs+mEeH5LkGSHAqLBdYnZxcbkcojfkgCOw5rO6dWn2jd9ESl8mFA/xxKnbA==
+
 react-is@^16.12.0, react-is@^16.13.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4:
   version "16.13.1"
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
@@ -6143,6 +6160,11 @@ react-native-onboarding-swiper@^1.1.4:
   integrity sha512-dG2J6giQpt5kKlU+Xe68E9xy+OkmC9Yf5XD7S1mJQ5VvwySfCIXnPojai0PEQ9NmbbH06k9lqN5Ik1PGYnIdVA==
   dependencies:
     tinycolor2 "^1.4.1"
+
+react-native-pell-rich-editor@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/react-native-pell-rich-editor/-/react-native-pell-rich-editor-1.7.0.tgz#dd7671f538b0e4d6dade74dcd3de406d659a0c7c"
+  integrity sha512-niFETEhkr0KZRDXDepwCTW2Z5a01hftdU/0djgqMZ2mmwbRq0sba4nGtmTbFYd04KcU7eTvbFjH19v98Dfa1nw==
 
 react-native-popup-dialog@^0.18.3:
   version "0.18.3"
