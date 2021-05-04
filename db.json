@@ -1,4 +1,7 @@
 {
+  "background": {
+    "text": "This is the background! Add new test. Go to the next line. \n\nThis is a new line. \n\nThis \n\n\nThis is \nXxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n\nSdfasefwa\n\nEsgrheshr\n\n\nSfageasg"
+  },
   "events": [
     {
       "id": "2",
