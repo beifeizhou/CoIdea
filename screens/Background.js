@@ -31,9 +31,9 @@ const Background = ({ navigation }) => {
     // Textinput needs to be modified 
     return (
         <View style={styles.view}>
-            {editable ? <Icon name='edit' onPress={toggle} /> : <Icon name='save' onPress={() => saveText(text)} />}
+            {editable ? <Icon name='edit' style={styles.icon} onPress={toggle} /> : <Icon name='save' style={styles.icon} onPress={() => saveText(text)} />}
             {editable ?
-                <Text style={styles.text} onPress={toggle}>{text}</Text> :
+                <Text style={styles.text}>{text}</Text> :
                 <TextInput value={text}
                     onChangeText={setText}
                     autoFocus
@@ -50,10 +50,14 @@ const Background = ({ navigation }) => {
 const styles = StyleSheet.create({
     view: {
         flex: 1,
-        padding: 10,
+        padding: 2,
+        backgroundColor: 'lightblue'
     },
     text: {
         height: '80%'
+    },
+    icon: {
+        alignSelf: 'flex-end'
     }
 })
 
