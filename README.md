@@ -1,5 +1,19 @@
 # CoIdea
 
-- expo start
-- package.json scripts: "server": "json-server --watch db.json --port 5000"
-- npm run server
+## Getting started
+
+Run one terminal with
+
+    expo start
+
+See package.json scripts: "server": "json-server --watch db.json --port 5000"
+
+In another terminal
+
+    npm run server
+
+## Installation
+
+Run
+
+    npm install
