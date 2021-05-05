@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, TextInput, StyleSheet } from 'react-native'
+import { View, Text, TextInput, StyleSheet, ScrollView } from 'react-native'
 import { Header, Button, Icon } from 'react-native-elements'
 import { set } from 'react-native-reanimated'
 
@@ -31,7 +31,10 @@ const Background = ({ navigation }) => {
     // Textinput needs to be modified 
     return (
         <View style={styles.view}>
-            {editable ? <Icon name='edit' style={styles.icon} onPress={toggle} /> : <Icon name='save' style={styles.icon} onPress={() => saveText(text)} />}
+            {editable ?
+                <Icon name='edit' style={styles.icon} onPress={toggle} /> :
+                <Icon name='done' style={styles.icon} onPress={() => saveText(text)} />
+            }
             {editable ?
                 <Text style={styles.text}>{text}</Text> :
                 <TextInput value={text}
@@ -43,6 +46,7 @@ const Background = ({ navigation }) => {
                 >
                 </TextInput>
             }
+
         </View>
     )
 }
@@ -51,10 +55,13 @@ const styles = StyleSheet.create({
     view: {
         flex: 1,
         padding: 2,
-        backgroundColor: 'lightblue'
     },
     text: {
-        height: '80%'
+        height: '90%',
+        paddingLeft: 15,
+        paddingRight: 15,
+        fontSize: 18
+
     },
     icon: {
         alignSelf: 'flex-end'
