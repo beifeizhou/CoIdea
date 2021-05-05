@@ -71,7 +71,7 @@ const TimelineScreen = () => {
 
     return (
         <View style={styles.container}>
-            <Icon name="add" color="blue" size={30} onPress={toggleOverlay} />
+            <Icon name="add" color="#000000" size={30} onPress={toggleOverlay} />
             <Overlay isVisible={visible} overlayStyle={styles.overlay} onBackdropPress={toggleOverlay} >
                 <Input placeholder='Time'
                     onChangeText={onChangeTime}
@@ -92,11 +92,11 @@ const TimelineScreen = () => {
                 <Button title='Done' onPress={() => addEvent(time, title, description)} />
             </Overlay>
             <Timeline data={events}
-                circleSize={20}
-                circleColor='rgb(45,156,219)'
-                lineColor='rgb(45,156,219)'
+                circleSize={12}
+                circleColor='rgba(32,137,220, 0.6)'
+                lineColor='rgba(32,137,220,0.8)'
                 timeContainerStyle={{ minWidth: 52, marginTop: -5 }}
-                timeStyle={{ textAlign: 'center', backgroundColor: '#ff9797', color: 'white', padding: 5, borderRadius: 13 }}
+                timeStyle={{ textAlign: 'center', backgroundColor: 'rgba(32,137,220,0.7)', color: '#FFFF', padding: 5, borderRadius: 10 }}
                 descriptionStyle={{ color: 'gray' }}
                 options={{
                     style: {
