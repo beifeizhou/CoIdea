@@ -1,6 +1,10 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import { Text, ListItem, Icon, Button, Card } from 'react-native-elements'
+import Amplify from '@aws-amplify/core';
+import awsmobile from '../src/aws-exports';
+import { API } from 'aws-amplify';
+import Auth from '@aws-amplify/auth';
 
 const list = [
     {
@@ -21,20 +25,40 @@ const list = [
     }
 ]
 
-const clickNav = ({ title, navigation }) => {
-    switch (title) {
-        case "Background":
-            navigation.navigate('Background');
-            break;
-        default:
-            navigation.navigate('Background');
+Amplify.configure({
+    ...awsmobile,
+    Analytics: {
+        disabled: true
     }
-}
-
-const clickNavTest = ({ navigation }) => { navigation.navigate('Background') }
-
+});
 
 const HomeScreen = ({ navigation }) => {
+    const apiName = 'codieapy'
+    const myInit = {}
+    const [userId, setUserId] = useState(null)
+    useEffect(() => {
+        Auth.currentUserInfo()
+            .then((data) => { setUserId(data.id) })
+            .catch(error => console.log(`Error: ${error.message}`));
+    })
+    const path = `/users/${userId}/background`
+
+    const [checkUser, setCheckUser] = useState(false)
+
+    API.get(apiName, path, myInit)
+        .then(response => { if (response != null) { console.log(response); setCheckUser(true) } })
+        .catch(error => {
+            console.log(error.response);
+        });
+
+    if (!checkUser) {
+        API.put(apiName, path, myInit)
+            .then(response => { console.log(response) })
+            .catch(error => {
+                console.log(error.response);
+            })
+    }
+
     return (
         <View>
             {list.map((item, i) => (

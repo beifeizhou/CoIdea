@@ -48,6 +48,26 @@ async function signOut() {
   }
 }
 
+const authTheme = {
+  ...AmplifyTheme,
+  sectionFooterLink: {
+    ...AmplifyTheme.sectionFooterLink,
+    color: 'black'
+  },
+  button: {
+    ...AmplifyTheme.button,
+    backgroundColor: "black",
+  },
+  sectionFooterLinkDisabled: {
+    ...AmplifyTheme.sectionFooterLinkDisabled,
+    backgroundColor: "black"
+  },
+  buttonDisabled: {
+    ...AmplifyTheme.buttonDisabled,
+    backgroundColor: "black"
+  }
+}
+
 const AppStack = createStackNavigator();
 
 const App = () => {
@@ -60,21 +80,10 @@ const App = () => {
         <AppStack.Screen name='TimelineScreen' component={TimelineScreen} options={{ title: 'Timeline' }} />
         <AppStack.Screen name='Demo' component={Demo} options={{ title: 'Research' }} />
       </AppStack.Navigator>
-    </NavigationContainer>
+    </NavigationContainer >
   );
 }
 
-const authTheme = {
-  ...AmplifyTheme,
-  sectionFooterLink: {
-    ...AmplifyTheme.sectionFooterLink,
-    color: 'black'
-  },
-  button: {
-    ...AmplifyTheme.button,
-    backgroundColor: "black",
-  }
-}
 export default withAuthenticator(App, {
   signUpConfig: signUpConfig,
   usernameAttributes: "email",
