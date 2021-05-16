@@ -65,30 +65,28 @@ const HomeScreen = ({ navigation }) => {
             })
     }
 
-    return (
-        <View >
-            {list.map((item, i) => (
-                <ListItem key={i} bottomDivider>
-                    <Icon name={item.icon} />
-                    <ListItem.Content>
-                        <ListItem.Title>{item.title}</ListItem.Title>
-                    </ListItem.Content>
-                    <ListItem.Chevron onPress={() => {
-                        switch (item.title) {
-                            case 'Background':
-                                navigation.navigate('Background', { userId: userId, apiName: apiName, path: path });
-                                break;
-                            case 'Timeline':
-                                navigation.navigate('TimelineScreen', { userId: userId, apiName: apiName, path: path });
-                                break;
-                            default:
-                                navigation.navigate('Demo');
-                        }
-                    }}
-                    />
-                </ListItem>))}
-        </View>
-    )
+    return (<View style={styles.homeContainer}>
+        {list.map((item, i) => (<TouchableOpacity
+            key={i}
+            activeOpacity={0.5}
+            style={styles.gridBox}
+            onPress={() => {
+                switch (item.title) {
+                    case 'Background':
+                        navigation.navigate('Background', { userId: userId, apiName: apiName, path: path });
+                        break;
+                    case 'Timeline':
+                        navigation.navigate('TimelineScreen', { userId: userId, apiName: apiName, path: path });
+                        break;
+                    default:
+                        navigation.navigate('Demo');
+                }
+            }}
+        >
+            <Image source={item.iconImage} style={styles.iconImage}></Image>
+            <Text>{item.title}</Text>
+        </TouchableOpacity>))}
+    </View>)
 }
 
 // 新界面
@@ -140,4 +138,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default HomeScreen2
+export default HomeScreen
