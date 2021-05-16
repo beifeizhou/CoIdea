@@ -4,9 +4,32 @@ import { View, StyleSheet, TextInput, Alert } from 'react-native'
 import { Button, Icon, Overlay, Input, Text } from 'react-native-elements'
 import { v4 as uuidv4 } from 'uuid'
 import { event } from 'react-native-reanimated'
+import Amplify from '@aws-amplify/core';
+import awsmobile from '../src/aws-exports';
+import { API } from 'aws-amplify';
+import Auth from '@aws-amplify/auth';
 
-const TimelineScreen = () => {
+const TimelineScreen = ({ navigation, route }) => {
+    const { userId, apiName, path } = route.params
+    const myInit = {}
     const [events, setEvents] = useState([])
+
+    useEffect(() => {
+        API.get(apiName, path, myInit)
+            .then(response => {
+                if (response != null) {
+                    console.log(response)
+                    if (response.hasOwnProperty('events')) {
+                        setEvents(response.events)
+                    }
+                }
+            })
+            .catch(error => {
+                console.log(error.response);
+            });
+    }, [])
+
+
     const [time, onChangeTime] = useState('')
     const [title, onChangeTitle] = useState('')
     const [description, onChangeDescription] = useState('')
@@ -50,6 +73,31 @@ const TimelineScreen = () => {
         setVisible(!visible)
     }
 
+    const addEventApi = (time, title, description) => {
+        const newEvent = {
+            "id": uuidv4(),
+            "time": time,
+            "title": title,
+            "description": description
+        }
+
+        const myInit = {
+            'body': {
+                'user_id': userId,
+                'event': newEvent
+            }
+        }
+
+        API.post(apiName, path, myInit)
+            .then(response => { console.log(response) })
+            .catch(error => {
+                console.log(error.response);
+            })
+
+        setEvents([...events, newEvent])
+        setVisible(!visible)
+    }
+
     const deleletEvent = (id) => {
         fetch(`http://localhost:5000/events/${id}`, { method: 'DELETE' })
         setEvents(events.filter((each) => each.id != id))
@@ -89,7 +137,7 @@ const TimelineScreen = () => {
                     onChangeText={onChangeDescription}
                     value={description}
                 />
-                <Button title='Done' onPress={() => addEvent(time, title, description)} />
+                <Button title='Done' onPress={() => addEventApi(time, title, description)} />
             </Overlay>
             <Timeline data={events}
                 circleSize={12}

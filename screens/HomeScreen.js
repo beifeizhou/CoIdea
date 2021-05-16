@@ -75,7 +75,7 @@ const HomeScreen = ({ navigation }) => {
                                 navigation.navigate('Background', { userId: userId, apiName: apiName, path: path });
                                 break;
                             case 'Timeline':
-                                navigation.navigate('TimelineScreen');
+                                navigation.navigate('TimelineScreen', { userId: userId, apiName: apiName, path: path });
                                 break;
                             default:
                                 navigation.navigate('Demo');

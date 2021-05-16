@@ -15,6 +15,7 @@ Amplify.configure({
 });
 
 const Background = ({ navigation, route }) => {
+    console.log(JSON.stringify(route.params))
     const { userId, apiName, path } = route.params
     const myInit = {}
     const [text, setText] = useState('')
