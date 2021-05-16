@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { View, Text, TextInput, StyleSheet, ScrollView } from 'react-native'
 import { Header, Button, Icon } from 'react-native-elements'
 import { set } from 'react-native-reanimated'
-import Amplify from '@aws-amplify/core';
+import Amplify, { JS } from '@aws-amplify/core';
 import awsmobile from '../src/aws-exports';
 import { API } from 'aws-amplify';
 import Auth from '@aws-amplify/auth';
@@ -14,25 +14,19 @@ Amplify.configure({
     }
 });
 
-const Background = ({ navigation }) => {
-    const apiName = 'codieapy'
+const Background = ({ navigation, route }) => {
+    const { userId, apiName, path } = route.params
     const myInit = {}
-    const [userId, setUserId] = useState(null)
     const [text, setText] = useState('')
-    useEffect(() => {
-        Auth.currentUserInfo()
-            .then((data) => { setUserId(data.id) })
-            .catch(error => console.log(`Error: ${error.message}`));
-    })
-    const path = `/users/${userId}/background`
-
-    const [checkUser, setCheckUser] = useState(false)
+    const [editable, setEditable] = useState(true)
+    const toggle = () => {
+        setEditable(!editable);
+    };
     useEffect(() => {
         API.get(apiName, path, myInit)
             .then(response => {
                 if (response != null) {
                     console.log(response)
-                    setCheckUser(true)
                     if (response.hasOwnProperty('background')) {
                         setText(response.background)
                     }
@@ -42,41 +36,6 @@ const Background = ({ navigation }) => {
                 console.log(error.response);
             });
     }, [])
-
-    // if (!checkUser) {
-    //     API.put(apiName, path, myInit)
-    //         .then(response => { console.log(response) })
-    //         .catch(error => {
-    //             console.log(error.response);
-    //         })
-    // }
-
-
-
-
-    // const [text, setText] = useState([])
-    // useEffect(() => {
-    //     fetch('http://localhost:5000/background')
-    //         .then(res => { return res.json() })
-    //         .then(text => { setText(text.text) })
-    // }, [])
-
-    const [editable, setEditable] = useState(true)
-    const toggle = () => {
-        setEditable(!editable);
-    };
-
-    // const saveText = (text) => {
-    //     const textObj = { "text": text }
-    //     fetch('http://localhost:5000/background', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-type': 'application/json',
-    //         },
-    //         body: JSON.stringify(textObj)
-    //     })
-    //     setEditable(!editable)
-    // }
 
     const saveText = (text) => {
         const myInit = {

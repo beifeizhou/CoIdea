@@ -36,22 +36,24 @@ const HomeScreen = ({ navigation }) => {
     const apiName = 'codieapy'
     const myInit = {}
     const [userId, setUserId] = useState(null)
+    const [checkUser, setCheckUser] = useState(null)
     useEffect(() => {
         Auth.currentUserInfo()
-            .then((data) => { setUserId(data.id) })
+            .then((data) => { setUserId(data.id); console.log(userId) })
             .catch(error => console.log(`Error: ${error.message}`));
     })
     const path = `/users/${userId}/background`
+    console.log(path)
 
-    const [checkUser, setCheckUser] = useState(false)
+    if (userId != null) {
+        API.get(apiName, path, myInit)
+            .then(response => { if (response != null) { setCheckUser(true) } })
+            .catch(error => {
+                console.log(error.response);
+            });
+    }
 
-    API.get(apiName, path, myInit)
-        .then(response => { if (response != null) { console.log(response); setCheckUser(true) } })
-        .catch(error => {
-            console.log(error.response);
-        });
-
-    if (!checkUser) {
+    if (checkUser != null && !checkUser) {
         API.put(apiName, path, myInit)
             .then(response => { console.log(response) })
             .catch(error => {
@@ -70,7 +72,7 @@ const HomeScreen = ({ navigation }) => {
                     <ListItem.Chevron onPress={() => {
                         switch (item.title) {
                             case 'Background':
-                                navigation.navigate('Background');
+                                navigation.navigate('Background', { userId: userId, apiName: apiName, path: path });
                                 break;
                             case 'Timeline':
                                 navigation.navigate('TimelineScreen');
