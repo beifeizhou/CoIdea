@@ -69,6 +69,7 @@ const HomeScreen = ({ navigation }) => {
 const HomeScreen2 = ({ navigation }) => {
     return (<View style={styles.homeContainer}>
         {list.map((item, i) => (<TouchableOpacity
+            key={i}
             activeOpacity={0.5}
             style={styles.gridBox}
             onPress={() => {
