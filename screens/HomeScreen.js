@@ -42,15 +42,12 @@ const HomeScreen = ({ navigation }) => {
     const myInit = {}
     const [userId, setUserId] = useState(null)
     const [checkUser, setCheckUser] = useState(null)
-    const [bgText, setBgText] = useState(null)
-    const [events, setEvents] = useState([])
     useEffect(() => {
         Auth.currentUserInfo()
             .then((data) => { setUserId(data.id); console.log(userId) })
             .catch(error => console.log(`Error: ${error.message}`))
     }, [])
     const path = `/users/${userId}/background`
-
 
     useEffect(() => {
         if (userId != null) {
@@ -60,9 +57,8 @@ const HomeScreen = ({ navigation }) => {
                     if (res != null) {
                         console.log(res)
                         setCheckUser(true)
-                        setBgText(res.background)
-                        setEvents(res.events)
                     } else {
+                        console.log(res)
                         setCheckUser(false)
                     }
                 })
@@ -74,6 +70,7 @@ const HomeScreen = ({ navigation }) => {
 
     useEffect(() => {
         if (userId != null && !checkUser) {
+            console.log('start to put')
             API.put(apiName, path, myInit)
                 .then(res => { console.log(res) })
                 .catch(error => {
@@ -81,11 +78,10 @@ const HomeScreen = ({ navigation }) => {
                 })
 
         }
-    }, [])
+    }, [checkUser])
 
-
+    console.log(userId)
     console.log(path)
-    console.log(bgText)
 
     return (<View style={styles.homeContainer}>
         {list.map((item, i) => (<TouchableOpacity
@@ -95,10 +91,10 @@ const HomeScreen = ({ navigation }) => {
             onPress={() => {
                 switch (item.title) {
                     case 'Background':
-                        navigation.navigate('Background', { userId: userId, apiName: apiName, path: path, bgText: bgText });
+                        navigation.navigate('Background', { userId: userId, apiName: apiName, path: path });
                         break;
                     case 'Timeline':
-                        navigation.navigate('TimelineScreen', { userId: userId, apiName: apiName, path: path, events: events });
+                        navigation.navigate('TimelineScreen', { userId: userId, apiName: apiName, path: path });
                         break;
                     default:
                         navigation.navigate('Demo');
