@@ -10,37 +10,14 @@ import { API } from 'aws-amplify';
 import Auth from '@aws-amplify/auth';
 
 const TimelineScreen = ({ navigation, route }) => {
-    const { userId, apiName, path } = route.params
+    const { userId, apiName, path, events } = route.params
     const myInit = {}
-    const [events, setEvents] = useState([])
-
-    useEffect(() => {
-        API.get(apiName, path, myInit)
-            .then(response => {
-                if (response != null) {
-                    console.log(response)
-                    if (response.hasOwnProperty('events')) {
-                        setEvents(response.events)
-                    }
-                }
-            })
-            .catch(error => {
-                console.log(error.response);
-            });
-    }, [])
+    const [myEvents, setMyEvents] = useState(events)
 
 
     const [time, onChangeTime] = useState('')
     const [title, onChangeTitle] = useState('')
     const [description, onChangeDescription] = useState('')
-
-    useEffect(() => {
-        fetch('http://localhost:5000/events')
-            .then(res => { return res.json() })
-            .then(data => { setEvents(data) })
-    }, [])
-
-    // Display the overlay Input
     const [visible, setVisible] = useState(false);
 
     const toggleOverlay = () => {
@@ -73,6 +50,7 @@ const TimelineScreen = ({ navigation, route }) => {
         setVisible(!visible)
     }
 
+    // Add event via api
     const addEventApi = (time, title, description) => {
         const newEvent = {
             "id": uuidv4(),
@@ -80,11 +58,11 @@ const TimelineScreen = ({ navigation, route }) => {
             "title": title,
             "description": description
         }
-
+        const added = [...myEvents, newEvent]
         const myInit = {
             'body': {
                 'user_id': userId,
-                'event': newEvent
+                'events': added
             }
         }
 
@@ -93,8 +71,7 @@ const TimelineScreen = ({ navigation, route }) => {
             .catch(error => {
                 console.log(error.response);
             })
-
-        setEvents([...events, newEvent])
+        setMyEvents(added)
         setVisible(!visible)
     }
 
@@ -139,7 +116,7 @@ const TimelineScreen = ({ navigation, route }) => {
                 />
                 <Button title='Done' onPress={() => addEventApi(time, title, description)} />
             </Overlay>
-            <Timeline data={events}
+            <Timeline data={myEvents}
                 circleSize={12}
                 circleColor='rgba(32,137,220, 0.6)'
                 lineColor='rgba(32,137,220,0.8)'
