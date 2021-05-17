@@ -5,6 +5,7 @@ import Amplify from '@aws-amplify/core';
 import awsmobile from '../src/aws-exports';
 import { API } from 'aws-amplify';
 import Auth from '@aws-amplify/auth';
+import { set } from 'react-native-reanimated';
 
 const list = [
     {
@@ -41,29 +42,50 @@ const HomeScreen = ({ navigation }) => {
     const myInit = {}
     const [userId, setUserId] = useState(null)
     const [checkUser, setCheckUser] = useState(null)
+    const [bgText, setBgText] = useState(null)
+    const [events, setEvents] = useState([])
     useEffect(() => {
         Auth.currentUserInfo()
             .then((data) => { setUserId(data.id); console.log(userId) })
-            .catch(error => console.log(`Error: ${error.message}`));
-    })
+            .catch(error => console.log(`Error: ${error.message}`))
+    }, [])
     const path = `/users/${userId}/background`
+
+
+    useEffect(() => {
+        if (userId != null) {
+            console.log(userId)
+            API.get(apiName, path, myInit)
+                .then(res => {
+                    if (res != null) {
+                        console.log(res)
+                        setCheckUser(true)
+                        setBgText(res.background)
+                        setEvents(res.events)
+                    } else {
+                        setCheckUser(false)
+                    }
+                })
+                .catch(error => {
+                    console.log(error.response);
+                })
+        }
+    }, [])
+
+    useEffect(() => {
+        if (userId != null && !checkUser) {
+            API.put(apiName, path, myInit)
+                .then(res => { console.log(res) })
+                .catch(error => {
+                    console.log(error.response);
+                })
+
+        }
+    }, [])
+
+
     console.log(path)
-
-    if (userId != null) {
-        API.get(apiName, path, myInit)
-            .then(response => { if (response != null) { setCheckUser(true) } })
-            .catch(error => {
-                console.log(error.response);
-            });
-    }
-
-    if (checkUser != null && !checkUser) {
-        API.put(apiName, path, myInit)
-            .then(response => { console.log(response) })
-            .catch(error => {
-                console.log(error.response);
-            })
-    }
+    console.log(bgText)
 
     return (<View style={styles.homeContainer}>
         {list.map((item, i) => (<TouchableOpacity
@@ -73,10 +95,10 @@ const HomeScreen = ({ navigation }) => {
             onPress={() => {
                 switch (item.title) {
                     case 'Background':
-                        navigation.navigate('Background', { userId: userId, apiName: apiName, path: path });
+                        navigation.navigate('Background', { userId: userId, apiName: apiName, path: path, bgText: bgText });
                         break;
                     case 'Timeline':
-                        navigation.navigate('TimelineScreen', { userId: userId, apiName: apiName, path: path });
+                        navigation.navigate('TimelineScreen', { userId: userId, apiName: apiName, path: path, events: events });
                         break;
                     default:
                         navigation.navigate('Demo');
