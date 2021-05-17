@@ -70,7 +70,7 @@ const HomeScreen = ({ navigation }) => {
                     console.log(error.response);
                 })
         }
-    }, [])
+    }, [userId])
 
     useEffect(() => {
         if (userId != null && !checkUser) {
