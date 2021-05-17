@@ -16,13 +16,17 @@ Amplify.configure({
 
 const Background = ({ navigation, route }) => {
     console.log(JSON.stringify(route.params))
-    const { userId, apiName, path, bgText } = route.params
+    const { userId, apiName, path } = route.params
     const myInit = {}
-    const [text, setText] = useState(bgText)
+    const [text, setText] = useState('')
     const [editable, setEditable] = useState(true)
     const toggle = () => {
         setEditable(!editable);
     };
+
+    useEffect(() => {
+        API.get(apiName, path, myInit).then(res => setText(res.background))
+    }, [])
 
     const saveText = (text) => {
         const myInit = {

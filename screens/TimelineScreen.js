@@ -10,15 +10,17 @@ import { API } from 'aws-amplify';
 import Auth from '@aws-amplify/auth';
 
 const TimelineScreen = ({ navigation, route }) => {
-    const { userId, apiName, path, events } = route.params
+    const { userId, apiName, path } = route.params
     const myInit = {}
-    const [myEvents, setMyEvents] = useState(events)
-
-
+    const [myEvents, setMyEvents] = useState([])
     const [time, onChangeTime] = useState('')
     const [title, onChangeTitle] = useState('')
     const [description, onChangeDescription] = useState('')
     const [visible, setVisible] = useState(false);
+
+    useEffect(() => {
+        API.get(apiName, path, myInit).then(res => setMyEvents(res.events))
+    }, [])
 
     const toggleOverlay = () => {
         setVisible(!visible);
@@ -50,6 +52,11 @@ const TimelineScreen = ({ navigation, route }) => {
         setVisible(!visible)
     }
 
+    const deleletEvent = (id) => {
+        fetch(`http://localhost:5000/events/${id}`, { method: 'DELETE' })
+        setEvents(events.filter((each) => each.id != id))
+    }
+
     // Add event via api
     const addEventApi = (time, title, description) => {
         const newEvent = {
@@ -58,11 +65,11 @@ const TimelineScreen = ({ navigation, route }) => {
             "title": title,
             "description": description
         }
-        const added = [...myEvents, newEvent]
+        const events = [...myEvents, newEvent]
         const myInit = {
             'body': {
                 'user_id': userId,
-                'events': added
+                'events': events
             }
         }
 
@@ -71,13 +78,26 @@ const TimelineScreen = ({ navigation, route }) => {
             .catch(error => {
                 console.log(error.response);
             })
-        setMyEvents(added)
+        setMyEvents(events)
         setVisible(!visible)
     }
 
-    const deleletEvent = (id) => {
-        fetch(`http://localhost:5000/events/${id}`, { method: 'DELETE' })
-        setEvents(events.filter((each) => each.id != id))
+    // Delete via api
+    const deleteEventApi = (id) => {
+        const events = myEvents.filter((each) => each.id != id)
+        console.log(events)
+        const myInit = {
+            'body': {
+                'user_id': userId,
+                'events': events
+            }
+        }
+        API.post(apiName, path, myInit)
+            .then(response => { console.log(response) })
+            .catch(error => {
+                console.log(error.response);
+            })
+        setMyEvents(events)
     }
 
     const editDelete = (event) => {
@@ -87,7 +107,7 @@ const TimelineScreen = ({ navigation, route }) => {
             "",
             [
                 { text: "Edit", onPress: () => console.log('todo'), },
-                { text: "Delete", onPress: () => deleletEvent(id) },
+                { text: "Delete", onPress: () => deleteEventApi(id) },
                 { text: "Cancel", style: 'cancel' }
             ],
             { cancelable: false }
