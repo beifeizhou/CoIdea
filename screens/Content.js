@@ -47,13 +47,20 @@ const Content = ({ navigation, route }) => {
         setEditable(!editable)
     }
 
-    // Textinput needs to be modified 
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => {
+                let button = editable ?
+                    <Icon name='edit' style={styles.icon} onPress={toggle} /> :
+                    <Icon name='done' style={styles.icon} onPress={() => saveText(text)} />
+                return button;
+            }
+        })
+    }, [editable, text])
+
+    // Textinput needs to be modified
     return (
         <View style={styles.view}>
-            {editable ?
-                <Icon name='edit' style={styles.icon} onPress={toggle} /> :
-                <Icon name='done' style={styles.icon} onPress={() => saveText(text)} />
-            }
             {editable ?
                 <Text style={styles.text}>{text}</Text> :
                 <TextInput value={text}
@@ -65,7 +72,6 @@ const Content = ({ navigation, route }) => {
                 >
                 </TextInput>
             }
-
         </View>
     )
 }
