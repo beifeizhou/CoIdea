@@ -91,13 +91,18 @@ const HomeScreen = ({ navigation }) => {
             onPress={() => {
                 switch (item.title) {
                     case 'Background':
-                        navigation.navigate('Background', { userId: userId, apiName: apiName, path: path });
+                        navigation.navigate('Background', { userId: userId, apiName: apiName, path: path, screenName: 'background' });
                         break;
                     case 'Timeline':
                         navigation.navigate('TimelineScreen', { userId: userId, apiName: apiName, path: path });
                         break;
-                    default:
-                        navigation.navigate('Demo');
+                    case 'Research':
+                        navigation.navigate('Research', { userId: userId, apiName: apiName, path: path, screenName: 'research' });
+                        break;
+                    case 'Roadmap':
+                        navigation.navigate('Roadmap', { userId: userId, apiName: apiName, path: path, screenName: 'roadmap' });
+                        break;
+
                 }
             }}
         >
