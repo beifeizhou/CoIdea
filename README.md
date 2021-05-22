@@ -21,4 +21,5 @@ Run
 ## Add environment variable
 
 Run
-export EXPO_LEGACY_IMPORTS=1
+
+    export EXPO_LEGACY_IMPORTS=1
