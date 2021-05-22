@@ -17,3 +17,8 @@ In another terminal
 Run
 
     npm install
+
+## Add environment variable
+
+Run
+export EXPO_LEGACY_IMPORTS=1
