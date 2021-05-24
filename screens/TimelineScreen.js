@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import Timeline from 'react-native-timeline-flatlist'
-import { View, StyleSheet, TextInput, Alert } from 'react-native'
-import { Button, Icon, Overlay, Input, Text } from 'react-native-elements'
+import { View, StyleSheet, TextInput, Alert, TouchableOpacity, Button } from 'react-native'
+import { Icon, Overlay, Input, Text } from 'react-native-elements'
 import { v4 as uuidv4 } from 'uuid'
-import { event } from 'react-native-reanimated'
-import Amplify from '@aws-amplify/core';
-import awsmobile from '../src/aws-exports';
-import { API } from 'aws-amplify';
-import Auth from '@aws-amplify/auth';
+import { API } from 'aws-amplify'
+import { TextInputMask } from 'react-native-masked-text'
+
 
 const TimelineScreen = ({ navigation, route }) => {
     const { userId, apiName, path } = route.params
@@ -32,6 +30,10 @@ const TimelineScreen = ({ navigation, route }) => {
         setEventVisible(!eventVisible);
         console.log(eventVisible)
     };
+
+    const custom_sort = (a, b) => {
+        return new Date(a.time).getTime() - new Date(b.time).getTime();
+    }
 
     // Add event
     const addEvent = (time, title, description) => {
@@ -66,6 +68,9 @@ const TimelineScreen = ({ navigation, route }) => {
             "description": description
         }
         const events = [...myEvents, newEvent]
+
+        events.sort(custom_sort)
+
         const myInit = {
             'body': {
                 'user_id': userId,
@@ -106,7 +111,6 @@ const TimelineScreen = ({ navigation, route }) => {
             "Edit or delete this event",
             "",
             [
-                { text: "Edit", onPress: () => console.log('todo'), },
                 { text: "Delete", onPress: () => deleteEventApi(id) },
                 { text: "Cancel", style: 'cancel' }
             ],
@@ -114,13 +118,28 @@ const TimelineScreen = ({ navigation, route }) => {
         );
     }
 
+    const validateDateTime = () => {
+        console.log('Test......')
+    };
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: () =>
+                <Button title='Add' onPress={toggleOverlay}></Button>
+        })
+    }, [toggleOverlay])
+
     return (
         <View style={styles.container}>
-            <Icon name="add" color="#000000" size={30} onPress={toggleOverlay} />
+            {/* <Icon name="add" color="#000000" size={30} onPress={toggleOverlay} style={styles.icon} /> */}
             <Overlay isVisible={visible} overlayStyle={styles.overlay} onBackdropPress={toggleOverlay} >
-                <Input placeholder='Time'
+                <Input
+                    label='Time'
+                    placeholder='2021/05/24 00:00'
                     onChangeText={onChangeTime}
-                    value={time} />
+                    value={time}
+                    onFocus={validateDateTime}
+                />
                 <Input placeholder='Title'
                     onChangeText={onChangeTitle}
                     value={title} />
@@ -137,11 +156,12 @@ const TimelineScreen = ({ navigation, route }) => {
                 <Button title='Done' onPress={() => addEventApi(time, title, description)} />
             </Overlay>
             <Timeline data={myEvents}
-                circleSize={12}
-                circleColor='rgba(32,137,220, 0.6)'
-                lineColor='rgba(32,137,220,0.8)'
-                timeContainerStyle={{ minWidth: 52, marginTop: -5 }}
-                timeStyle={{ textAlign: 'center', backgroundColor: 'rgba(32,137,220,0.7)', color: '#FFFF', padding: 5, borderRadius: 10 }}
+                circleStyle={{ position: 'absolute', left: 140 }}
+                circleSize={16}
+                circleColor='rgba(0,0,0, 0.3)'
+                lineColor='rgba(0,0,0,0.6)'
+                timeContainerStyle={{ minWidth: 125, marginTop: -5 }}
+                timeStyle={{ textAlign: 'center', backgroundColor: 'rgba(0,0,0,0.6)', color: '#FFFF', padding: 5, borderRadius: 10 }}
                 descriptionStyle={{ color: 'gray' }}
                 options={{
                     style: {
@@ -164,7 +184,6 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     overlay: {
-        flex: 0.5,
         width: '80%',
         height: '80%',
     },
@@ -175,5 +194,9 @@ const styles = StyleSheet.create({
     textArea: {
         height: 150,
         justifyContent: "flex-start"
+    },
+    icon: {
+        position: 'absolute',
+        bottom: 10
     }
 });
