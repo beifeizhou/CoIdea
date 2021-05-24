@@ -73,7 +73,6 @@ const Content = ({ navigation, route }) => {
                     >
                     </TextInput>
                 }
-                {/* </View> */}
             </ScrollView>
         </View>
     )
