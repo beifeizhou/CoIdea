@@ -26,7 +26,7 @@ const Content = ({ navigation, route }) => {
 
     console.log(screenName)
     useEffect(() => {
-        API.get(apiName, path, myInit).then(res => { console.log(res); console.log(res[screenName]); setText(res[screenName]) })
+        API.get(apiName, path, myInit).then(res => { setText(res[screenName]) })
     }, [])
 
     const saveText = (text) => {
@@ -60,18 +60,21 @@ const Content = ({ navigation, route }) => {
 
     // Textinput needs to be modified
     return (
-        <View style={styles.view}>
-            {editable ?
-                <Text style={styles.text}>{text}</Text> :
-                <TextInput value={text}
-                    onChangeText={setText}
-                    autoFocus
-                    multiline={true}
-                    returnKeyType="next"
-                    style={styles.text}
-                >
-                </TextInput>
-            }
+        <View style={{ flex: 1 }}>
+            <ScrollView>
+                {editable ?
+                    <Text style={styles.text}>{text}</Text> :
+                    <TextInput value={text}
+                        onChangeText={setText}
+                        autoFocus
+                        multiline={true}
+                        returnKeyType="next"
+                        style={styles.text}
+                    >
+                    </TextInput>
+                }
+                {/* </View> */}
+            </ScrollView>
         </View>
     )
 }
@@ -79,7 +82,7 @@ const Content = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     view: {
         flex: 1,
-        padding: 2,
+        // padding: 2,
     },
     text: {
         height: '90%',
