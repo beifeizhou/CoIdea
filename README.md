@@ -24,7 +24,7 @@ In another terminal
 
     npm run server
 
-![Simulator Screen Shot - iPhone 12 Pro Max - 2021-05-26 at 09 41 59](https://user-images.githubusercontent.com/4534232/119634799-fee06000-be0a-11eb-8c87-9bb32061be87.png)
-![Simulator Screen Shot - iPhone 12 Pro Max - 2021-05-26 at 10 13 50](https://user-images.githubusercontent.com/4534232/119634943-1ddef200-be0b-11eb-801a-3856886769d8.png)
+<img src="https://user-images.githubusercontent.com/4534232/119634799-fee06000-be0a-11eb-8c87-9bb32061be87.png" alt="Simulator1" width="100"/>
+<img src="https://user-images.githubusercontent.com/4534232/119634943-1ddef200-be0b-11eb-801a-3856886769d8.png" alt="Simulator2" width="100"/>
 
 
