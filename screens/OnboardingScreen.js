@@ -64,12 +64,6 @@ const OnboardingScreen = ({ navigation }) => {
                         image: <Image style={styles.image} source={require('../assets/logo.png')} />,
                         title: 'CoIdea',
                         subtitle: 'Write your idea collaboratively',
-                    },
-                    {
-                        backgroundColor: '#fff',
-                        image: <Image style={styles.image} source={require('../assets/logo.png')} />,
-                        title: 'How it works',
-                        subtitle: 'Background, timeline, research, roadmap',
                     }
                 ]}
         />

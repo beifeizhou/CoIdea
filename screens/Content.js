@@ -14,9 +14,9 @@ Amplify.configure({
     }
 });
 
-const Background = ({ navigation, route }) => {
+const Content = ({ navigation, route }) => {
     console.log(JSON.stringify(route.params))
-    const { userId, apiName, path } = route.params
+    const { userId, apiName, path, screenName } = route.params
     const myInit = {}
     const [text, setText] = useState('')
     const [editable, setEditable] = useState(true)
@@ -24,17 +24,20 @@ const Background = ({ navigation, route }) => {
         setEditable(!editable);
     };
 
+    console.log(screenName)
     useEffect(() => {
-        API.get(apiName, path, myInit).then(res => setText(res.background))
+        API.get(apiName, path, myInit).then(res => { setText(res[screenName]) })
     }, [])
 
     const saveText = (text) => {
         const myInit = {
             'body': {
                 'user_id': userId,
-                'background': text
+                [screenName]: text
             }
         }
+
+        console.log(myInit)
 
         API.post(apiName, path, myInit)
             .then(response => { console.log(response) })
@@ -44,25 +47,33 @@ const Background = ({ navigation, route }) => {
         setEditable(!editable)
     }
 
-    // Textinput needs to be modified 
-    return (
-        <View style={styles.view}>
-            {editable ?
-                <Icon name='edit' style={styles.icon} onPress={toggle} /> :
-                <Icon name='done' style={styles.icon} onPress={() => saveText(text)} />
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => {
+                let button = editable ?
+                    <Icon name='edit' style={styles.icon} onPress={toggle} /> :
+                    <Icon name='done' style={styles.icon} onPress={() => saveText(text)} />
+                return button;
             }
-            {editable ?
-                <Text style={styles.text}>{text}</Text> :
-                <TextInput value={text}
-                    onChangeText={setText}
-                    autoFocus
-                    multiline={true}
-                    returnKeyType="next"
-                    style={styles.text}
-                >
-                </TextInput>
-            }
+        })
+    }, [editable, text])
 
+    // Textinput needs to be modified
+    return (
+        <View style={{ flex: 1 }}>
+            <ScrollView>
+                {editable ?
+                    <Text style={styles.text}>{text}</Text> :
+                    <TextInput value={text}
+                        onChangeText={setText}
+                        autoFocus
+                        multiline={true}
+                        returnKeyType="next"
+                        style={styles.text}
+                    >
+                    </TextInput>
+                }
+            </ScrollView>
         </View>
     )
 }
@@ -70,7 +81,7 @@ const Background = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     view: {
         flex: 1,
-        padding: 2,
+        // padding: 2,
     },
     text: {
         height: '90%',
@@ -84,4 +95,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Background;
+export default Content;
