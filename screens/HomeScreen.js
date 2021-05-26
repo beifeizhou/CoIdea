@@ -11,22 +11,22 @@ const list = [
     {
         title: 'Background',
         icon: 'note',
-        iconImage: require('../src/asserts/beijing.png')
+        iconImage: require('../assets/beijing.png')
     },
     {
         title: 'Timeline',
         icon: 'timeline',
-        iconImage: require('../src/asserts/shijianzhou.png')
+        iconImage: require('../assets/shijianzhou.png')
     },
     {
         title: 'Research',
         icon: 'lightbulb',
-        iconImage: require('../src/asserts/yanjiu.png')
+        iconImage: require('../assets/yanjiu.png')
     },
     {
         title: 'Roadmap',
         icon: 'star',
-        iconImage: require('../src/asserts/luxiantu-2.png')
+        iconImage: require('../assets/luxiantu-2.png')
     }
 ]
 
