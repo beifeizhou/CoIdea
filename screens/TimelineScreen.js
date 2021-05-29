@@ -4,8 +4,6 @@ import { View, StyleSheet, TextInput, Alert, TouchableOpacity, Button } from 're
 import { Icon, Overlay, Input, Text } from 'react-native-elements'
 import { v4 as uuidv4 } from 'uuid'
 import { API } from 'aws-amplify'
-import { TextInputMask } from 'react-native-masked-text'
-
 
 const TimelineScreen = ({ navigation, route }) => {
     const { userId, apiName, path } = route.params

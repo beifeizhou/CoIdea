@@ -54,8 +54,8 @@ const OnboardingScreen = ({ navigation }) => {
             NextButtonComponent={Next}
             DoneButtonComponent={Done}
             DotComponent={Dots}
-            onSkip={() => navigation.replace("Home")}
-            onDone={() => navigation.replace("Home")}
+            onSkip={() => navigation.replace("Projects")}
+            onDone={() => navigation.replace("Projects")}
             imageContainerStyles={{ paddingTop: 0, flex: 0.5, justifyContent: 'flex-end', }}
             pages={
                 [
