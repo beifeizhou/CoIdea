@@ -1,11 +1,69 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ScrollView, Button, View, StyleSheet, Text } from 'react-native'
 import { ListItem } from 'react-native-elements'
-import { List } from 'react-native-paper';
+import { List } from 'react-native-paper'
+import Amplify from '@aws-amplify/core'
+import awsmobile from '../src/aws-exports'
+import { API } from 'aws-amplify'
+import Auth from '@aws-amplify/auth'
 
-
+Amplify.configure({
+    ...awsmobile,
+    Analytics: {
+        disabled: true
+    }
+});
 
 const Project = ({ navigation }) => {
+    const apiName = 'codieapy'
+    const myInit = {}
+    const [userId, setUserId] = useState(null)
+    const [email, setEmail] = useState(null)
+    const [user, setUser] = useState(null)
+    const [checkUser, setCheckUser] = useState(null)
+
+    useEffect(() => {
+        Auth.currentUserInfo()
+            .then((data) => { setUserId(data.id); setEmail(data.attributes.email) })
+            .catch(error => console.log(`Error: ${error.message}`))
+    }, [])
+
+    const path = `/users/${userId}/background`
+
+    useEffect(() => {
+        if (userId != null) {
+            console.log(userId)
+            API.get(apiName, path, myInit)
+                .then(res => {
+                    if (res != null) {
+                        console.log(res)
+                        setCheckUser(true)
+                    } else {
+                        console.log(res)
+                        setCheckUser(false)
+                    }
+                })
+                .catch(error => {
+                    console.log(error.response);
+                })
+        }
+    }, [userId])
+
+    useEffect(() => {
+        if (userId != null && !checkUser) {
+            console.log('start to put')
+            API.put(apiName, path, myInit)
+                .then(res => { console.log(res) })
+                .catch(error => {
+                    console.log(error.response);
+                })
+
+        }
+    }, [checkUser])
+
+    console.log(userId)
+    console.log(path)
+
 
     // Example: https://callstack.github.io/react-native-paper/list-accordion.html
     const [expanded, setExpanded] = React.useState(true);
