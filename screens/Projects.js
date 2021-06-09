@@ -15,12 +15,20 @@ Amplify.configure({
 });
 
 const Project = ({ navigation }) => {
-    const apiName = 'codieapy'
-    const myInit = {}
+    const apiName = 'coideadev'
+
     const [userId, setUserId] = useState(null)
     const [email, setEmail] = useState(null)
-    const [user, setUser] = useState(null)
     const [checkUser, setCheckUser] = useState(null)
+    const [jsonObj, setJsonObj] = useState(
+        {
+            user_id: null,
+            info: {
+                email: null,
+                projects: []
+            }
+        }
+    )
 
     useEffect(() => {
         Auth.currentUserInfo()
@@ -28,14 +36,16 @@ const Project = ({ navigation }) => {
             .catch(error => console.log(`Error: ${error.message}`))
     }, [])
 
-    const path = `/users/${userId}/background`
+    const path = `/users/${userId}`
 
     useEffect(() => {
         if (userId != null) {
             console.log(userId)
+            const myInit = {}
             API.get(apiName, path, myInit)
                 .then(res => {
                     if (res != null) {
+                        setJsonObj(res)
                         console.log(res)
                         setCheckUser(true)
                     } else {
@@ -47,28 +57,33 @@ const Project = ({ navigation }) => {
                     console.log(error.response);
                 })
         }
-    }, [userId])
+    }, [userId, email])
+    console.log(userId)
+    console.log(path)
+    console.log(email)
+    console.log(checkUser)
 
     useEffect(() => {
         if (userId != null && !checkUser) {
-            console.log('start to put')
-            API.put(apiName, path, myInit)
+            const myInit = {
+                'body': {
+                    'email': email
+                }
+            }
+            setJsonObj({ 'info': myInit['body'] })
+            API.post(apiName, path, myInit)
                 .then(res => { console.log(res) })
                 .catch(error => {
                     console.log(error.response);
                 })
-
         }
     }, [checkUser])
-
-    console.log(userId)
-    console.log(path)
-
+    console.log(`jsonObj: ${JSON.stringify(jsonObj)}`)
 
     // Example: https://callstack.github.io/react-native-paper/list-accordion.html
     const [expanded, setExpanded] = React.useState(true);
     const handlePress = () => setExpanded(!expanded);
-
+    const sharedProjects = jsonObj['info']['projects'].filter((project) => project.is_mine == false)
     return (
         <View style={{ flex: 0.95 }}>
             <ScrollView>
@@ -89,18 +104,15 @@ const Project = ({ navigation }) => {
                         {/* <List.Item title="Placeholder project 2" /> */}
                     </List.Accordion>
                     <List.Accordion title="Shared with me" expanded={expanded} onPress={handlePress}>
-                        <ListItem bottomDivider>
-                            <ListItem.Content>
-                                <ListItem.Title>Placeholder project 1</ListItem.Title>
-                            </ListItem.Content>
-                            {/* <ListItem.Chevron /> */}
-                        </ListItem>
-                        <ListItem bottomDivider>
-                            <ListItem.Content>
-                                <ListItem.Title>Placeholder project 2</ListItem.Title>
-                            </ListItem.Content>
-                            {/* <ListItem.Chevron /> */}
-                        </ListItem>
+                        {sharedProjects.map((sharedProject, i) => (
+                            <ListItem key={i} bottomDivider onPress={() => navigation.navigate("Home", { userId: userId, apiName: apiName, path: path, projectId: sharedProject['project_id'] })}>
+                                <ListItem.Content>
+                                    <ListItem.Title>{sharedProject.project_name}</ListItem.Title>
+                                </ListItem.Content>
+                                <ListItem.Chevron />
+                            </ListItem>
+                        ))
+                        }
                     </List.Accordion>
                 </List.Section>
 

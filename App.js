@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 import Projects from './screens/Projects'
 import OnboardingScreen from './screens/OnboardingScreen'
 import HomeScreen from './screens/HomeScreen'
+import Home from './screens/Home'
 import Content from './screens/Content'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -78,7 +79,8 @@ const App = () => {
       <AppStack.Navigator>
         <AppStack.Screen name='Onboarding' component={OnboardingScreen} />
         <AppStack.Screen name='Projects' component={Projects} options={{ headerRight: () => <Button title='Sign Out' color='black' onPress={signOut}></Button> }} />
-        <AppStack.Screen name='Home' component={HomeScreen} />
+        <AppStack.Screen name='HomeScreen' component={HomeScreen} />
+        <AppStack.Screen name='Home' component={Home} />
         <AppStack.Screen name='Background' component={Content} options={{ title: 'Background' }} />
         <AppStack.Screen name='TimelineScreen' component={TimelineScreen} options={{ title: 'Timeline' }} />
         <AppStack.Screen name='Research' component={Content} options={{ title: 'Research' }} />
