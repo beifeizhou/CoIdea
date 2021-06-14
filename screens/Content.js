@@ -26,27 +26,39 @@ const Content = ({ navigation, route }) => {
             }
         }
     )
+    const [project, setProject] = useState(
+        {
+            project_id: null,
+            project_name: null,
+            is_mine: null,
+            background: null,
+            research: null,
+            roadmap: null,
+            events: []
+        }
+    )
+
+    console.log(`project_id: ${projectId}`)
 
     useEffect(() => {
         API.get(apiName, path, myInit)
             .then(res => {
                 if (res != null) {
                     setJsonObj(res)
-                    console.log(res)
+                    setProject(res['info']['projects'].filter((proj) => proj.project_id == projectId)[0])
                 }
             })
     }, [])
-    const project = jsonObj['info']['projects'].filter((proj) => proj.project_id == projectId)[0]
-    console.log('Start to print project')
-    console.log(JSON.stringify(project))
 
     useEffect(() => {
-        if (screenName in project) { setText(project[screenName]) }
-    }, [jsonObj])
+        if (project !== null && typeof project === 'object' && screenName in project) { setText(project[screenName]) }
+    }, [project])
 
     const toggle = () => {
         setEditable(!editable);
-    };
+    }
+
+    console.log(JSON.stringify(project))
 
     const saveText = (text) => {
         setText(text)

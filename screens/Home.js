@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native'
-import { Text, ListItem, Icon, Button, Card } from 'react-native-elements'
+import { Text } from 'react-native-elements'
 import Amplify from '@aws-amplify/core';
-import awsmobile from '../src/aws-exports';
-import { API } from 'aws-amplify';
-import Auth from '@aws-amplify/auth';
-import { set } from 'react-native-reanimated';
+import awsmobile from '../src/aws-exports'
 
 const list = [
     {
@@ -48,16 +45,16 @@ const Home = ({ navigation, route }) => {
             onPress={() => {
                 switch (item.title) {
                     case 'Background':
-                        navigation.navigate('Background', { userId: userId, apiName: apiName, path: path, screenName: 'background', jsonObj: jsonObj, projectId: projectId });
+                        navigation.navigate('Background', { userId: userId, apiName: apiName, path: path, screenName: 'background', projectId: projectId });
                         break;
                     case 'Timeline':
-                        navigation.navigate('TimelineScreen', { userId: userId, apiName: apiName, path: path });
+                        navigation.navigate('TimelineScreen', { userId: userId, apiName: apiName, path: path, projectId: projectId });
                         break;
                     case 'Research':
-                        navigation.navigate('Research', { userId: userId, apiName: apiName, path: path, screenName: 'research' });
+                        navigation.navigate('Research', { userId: userId, apiName: apiName, path: path, screenName: 'research', projectId: projectId });
                         break;
                     case 'Roadmap':
-                        navigation.navigate('Roadmap', { userId: userId, apiName: apiName, path: path, screenName: 'roadmap' });
+                        navigation.navigate('Roadmap', { userId: userId, apiName: apiName, path: path, screenName: 'roadmap', projectId: projectId });
                         break;
 
                 }
