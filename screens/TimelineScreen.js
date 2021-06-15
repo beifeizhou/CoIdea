@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { API } from 'aws-amplify'
 
 const TimelineScreen = ({ navigation, route }) => {
-    const { userId, apiName, path } = route.params
+    const { userId, apiName, path, projectId } = route.params
     const myInit = {}
     const [myEvents, setMyEvents] = useState([])
     const [time, onChangeTime] = useState('')
@@ -14,9 +14,41 @@ const TimelineScreen = ({ navigation, route }) => {
     const [description, onChangeDescription] = useState('')
     const [visible, setVisible] = useState(false);
 
+    const [jsonObj, setJsonObj] = useState(
+        {
+            user_id: null,
+            info: {
+                email: null,
+                projects: []
+            }
+        }
+    )
+    const [project, setProject] = useState(
+        {
+            project_id: null,
+            project_name: null,
+            is_mine: null,
+            background: null,
+            research: null,
+            roadmap: null,
+            events: []
+        }
+    )
+
     useEffect(() => {
-        API.get(apiName, path, myInit).then(res => setMyEvents(res.events))
+        API.get(apiName, path, myInit)
+            .then(res => {
+                if (res != null) {
+                    setJsonObj(res)
+                    setProject(res['info']['projects'].filter((proj) => proj.project_id == projectId)[0])
+                }
+            })
     }, [])
+
+    useEffect(() => {
+        if (project !== null && typeof project === 'object' && 'events' in project) { setMyEvents(project['events']) }
+    }, [project])
+
 
     const toggleOverlay = () => {
         setVisible(!visible);
@@ -33,30 +65,6 @@ const TimelineScreen = ({ navigation, route }) => {
         return new Date(a.time).getTime() - new Date(b.time).getTime();
     }
 
-    // Add event
-    const addEvent = (time, title, description) => {
-        const newEvent = {
-            "id": uuidv4(),
-            "time": time,
-            "title": title,
-            "description": description
-        }
-        fetch('http://localhost:5000/events', {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify(newEvent)
-        })
-        setEvents([...events, newEvent])
-        setVisible(!visible)
-    }
-
-    const deleletEvent = (id) => {
-        fetch(`http://localhost:5000/events/${id}`, { method: 'DELETE' })
-        setEvents(events.filter((each) => each.id != id))
-    }
-
     // Add event via api
     const addEventApi = (time, title, description) => {
         const newEvent = {
@@ -66,15 +74,18 @@ const TimelineScreen = ({ navigation, route }) => {
             "description": description
         }
         const events = [...myEvents, newEvent]
+        project['events'] = events
 
         events.sort(custom_sort)
 
+        const rest = jsonObj['info']['projects'].filter((proj) => proj.project_id != projectId)
+        const newProjects = [...rest, project]
+        jsonObj['projects'] = newProjects
         const myInit = {
-            'body': {
-                'user_id': userId,
-                'events': events
-            }
+            'body': jsonObj['info']
         }
+
+        console.log(myInit)
 
         API.post(apiName, path, myInit)
             .then(response => { console.log(response) })
@@ -88,12 +99,13 @@ const TimelineScreen = ({ navigation, route }) => {
     // Delete via api
     const deleteEventApi = (id) => {
         const events = myEvents.filter((each) => each.id != id)
-        console.log(events)
+        project['events'] = events
+
+        const rest = jsonObj['info']['projects'].filter((proj) => proj.project_id != projectId)
+        const newProjects = [...rest, project]
+        jsonObj['info']['projects'] = newProjects
         const myInit = {
-            'body': {
-                'user_id': userId,
-                'events': events
-            }
+            'body': jsonObj['info']
         }
         API.post(apiName, path, myInit)
             .then(response => { console.log(response) })
@@ -117,7 +129,7 @@ const TimelineScreen = ({ navigation, route }) => {
     }
 
     const validateDateTime = () => {
-        console.log('Test......')
+        console.log('Need to add validation......')
     };
 
     useEffect(() => {

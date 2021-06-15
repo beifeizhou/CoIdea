@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { ScrollView, Button, View, StyleSheet, Text } from 'react-native'
-import { ListItem } from 'react-native-elements'
+import { ListItem, Overlay, Input } from 'react-native-elements'
 import { List } from 'react-native-paper'
 import Amplify from '@aws-amplify/core'
 import awsmobile from '../src/aws-exports'
 import { API } from 'aws-amplify'
 import Auth from '@aws-amplify/auth'
+import { v4 as uuidv4 } from 'uuid'
 
 Amplify.configure({
     ...awsmobile,
@@ -20,6 +21,8 @@ const Project = ({ navigation }) => {
     const [userId, setUserId] = useState(null)
     const [email, setEmail] = useState(null)
     const [checkUser, setCheckUser] = useState(null)
+    const [title, onChangeTitle] = useState('')
+    const [visible, setVisible] = useState(false);
     const [jsonObj, setJsonObj] = useState(
         {
             user_id: null,
@@ -29,6 +32,18 @@ const Project = ({ navigation }) => {
             }
         }
     )
+    const [project, setProject] = useState(
+        {
+            project_id: null,
+            project_name: null,
+            is_mine: null,
+            background: null,
+            research: null,
+            roadmap: null,
+            events: []
+        }
+    )
+
 
     useEffect(() => {
         Auth.currentUserInfo()
@@ -58,10 +73,6 @@ const Project = ({ navigation }) => {
                 })
         }
     }, [userId, email])
-    console.log(userId)
-    console.log(path)
-    console.log(email)
-    console.log(checkUser)
 
     useEffect(() => {
         if (userId != null && !checkUser) {
@@ -78,7 +89,34 @@ const Project = ({ navigation }) => {
                 })
         }
     }, [checkUser])
-    console.log(`jsonObj: ${JSON.stringify(jsonObj)}`)
+
+    const toggleOverlay = () => {
+        setVisible(!visible);
+    };
+
+    const addProject = (title) => {
+        const newProject = {
+            project_id: uuidv4(),
+            project_name: title,
+            is_mine: true
+        }
+        const projects = jsonObj['info']['projects']
+
+        const newProjects = [...projects, project]
+        jsonObj['info']['projects'] = newProjects
+
+        const myInit = {
+            'body': jsonObj['info']
+        }
+
+        API.post(apiName, path, myInit)
+            .then(response => { console.log(response) })
+            .catch(error => {
+                console.log(error.response);
+            })
+        setVisible(!visible)
+        setJsonObj(jsonObj)
+    }
 
     // Example: https://callstack.github.io/react-native-paper/list-accordion.html
     const [expanded, setExpanded] = React.useState(true);
@@ -118,8 +156,14 @@ const Project = ({ navigation }) => {
 
             </ScrollView>
             <View>
-                <Button title='Add new project' style={styles.button} />
+                <Button title='Add new project' style={styles.button} onPress={toggleOverlay} />
             </View>
+            <Overlay isVisible={visible} overlayStyle={styles.overlay} onBackdropPress={toggleOverlay} >
+                <Input placeholder='Project name'
+                    onChangeText={onChangeTitle}
+                    value={title} />
+                <Button title='Done' onPress={addProject} />
+            </Overlay>
         </View>
     )
 }
@@ -129,6 +173,10 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         left: 0,
+    },
+    overlay: {
+        width: '80%',
+        height: '15%',
     }
 })
 

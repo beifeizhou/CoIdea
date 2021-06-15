@@ -58,8 +58,6 @@ const Content = ({ navigation, route }) => {
         setEditable(!editable);
     }
 
-    console.log(JSON.stringify(project))
-
     const saveText = (text) => {
         setText(text)
         project[screenName] = text
@@ -70,13 +68,7 @@ const Content = ({ navigation, route }) => {
             'body': jsonObj['info']
         }
 
-        console.log(myInit)
-
         API.post(apiName, path, myInit)
-            .then(response => { console.log(response) })
-            .catch(error => {
-                console.log(error.response);
-            })
         setEditable(!editable)
     }
 
