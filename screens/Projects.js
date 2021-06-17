@@ -43,6 +43,7 @@ const Project = ({ navigation }) => {
             events: []
         }
     )
+    const [isDeleted, setIsDeleted] = useState(false)
 
     useEffect(() => {
         Auth.currentUserInfo()
@@ -117,6 +118,7 @@ const Project = ({ navigation }) => {
         const projects = jsonObj['info']['projects']
         const rest = projects.filter((project) => project.project_id != projectId)
         jsonObj['info']['projects'] = rest
+
         const myInit = {
             'body': jsonObj['info']
         }
@@ -125,10 +127,11 @@ const Project = ({ navigation }) => {
             .catch(error => {
                 console.log(error.response);
             })
+        setIsDeleted(true)
     }
 
-    const editDelete = (event) => {
-        const id = event.project_id
+    const editDelete = (project) => {
+        const id = project.project_id
         console.log(id)
         Alert.alert(
             "Delete this project",
@@ -138,7 +141,7 @@ const Project = ({ navigation }) => {
                 { text: "Cancel", style: 'cancel' }
             ],
             { cancelable: false }
-        );
+        )
     }
 
     // Example: https://callstack.github.io/react-native-paper/list-accordion.html
