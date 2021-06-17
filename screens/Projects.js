@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ScrollView, Button, View, StyleSheet, Text } from 'react-native'
+import { ScrollView, Button, View, StyleSheet, Alert } from 'react-native'
 import { ListItem, Overlay, Input } from 'react-native-elements'
 import { List } from 'react-native-paper'
 import Amplify from '@aws-amplify/core'
@@ -44,7 +44,6 @@ const Project = ({ navigation }) => {
         }
     )
 
-
     useEffect(() => {
         Auth.currentUserInfo()
             .then((data) => { setUserId(data.id); setEmail(data.attributes.email) })
@@ -55,16 +54,13 @@ const Project = ({ navigation }) => {
 
     useEffect(() => {
         if (userId != null) {
-            console.log(userId)
             const myInit = {}
             API.get(apiName, path, myInit)
                 .then(res => {
                     if (res != null) {
                         setJsonObj(res)
-                        console.log(res)
                         setCheckUser(true)
                     } else {
-                        console.log(res)
                         setCheckUser(false)
                     }
                 })
@@ -100,11 +96,11 @@ const Project = ({ navigation }) => {
             project_name: title,
             is_mine: true
         }
+
         const projects = jsonObj['info']['projects']
 
-        const newProjects = [...projects, project]
+        const newProjects = [...projects, newProject]
         jsonObj['info']['projects'] = newProjects
-
         const myInit = {
             'body': jsonObj['info']
         }
@@ -115,31 +111,58 @@ const Project = ({ navigation }) => {
                 console.log(error.response);
             })
         setVisible(!visible)
-        setJsonObj(jsonObj)
+    }
+
+    const deleteProject = (projectId) => {
+        const projects = jsonObj['info']['projects']
+        const rest = projects.filter((project) => project.project_id != projectId)
+        jsonObj['info']['projects'] = rest
+        const myInit = {
+            'body': jsonObj['info']
+        }
+        API.post(apiName, path, myInit)
+            .then(response => { console.log(response) })
+            .catch(error => {
+                console.log(error.response);
+            })
+    }
+
+    const editDelete = (event) => {
+        const id = event.project_id
+        console.log(id)
+        Alert.alert(
+            "Delete this project",
+            "",
+            [
+                { text: "Delete", onPress: () => deleteProject(id) },
+                { text: "Cancel", style: 'cancel' }
+            ],
+            { cancelable: false }
+        );
     }
 
     // Example: https://callstack.github.io/react-native-paper/list-accordion.html
     const [expanded, setExpanded] = React.useState(true);
     const handlePress = () => setExpanded(!expanded);
+    const myProjects = jsonObj['info']['projects'].filter((project) => project.is_mine == true)
     const sharedProjects = jsonObj['info']['projects'].filter((project) => project.is_mine == false)
     return (
         <View style={{ flex: 0.95 }}>
             <ScrollView>
                 <List.Section>
                     <List.Accordion title="My projects" expanded={expanded} onPress={handlePress}>
-                        <ListItem bottomDivider onPress={() => navigation.navigate("Home")} >
-                            <ListItem.Content>
-                                <ListItem.Title>Go to home project</ListItem.Title>
-                            </ListItem.Content>
-                            <ListItem.Chevron />
-                        </ListItem>
-                        <ListItem bottomDivider>
-                            <ListItem.Content>
-                                <ListItem.Title>Placeholder project 1</ListItem.Title>
-                            </ListItem.Content>
-                            {/* <ListItem.Chevron /> */}
-                        </ListItem>
-                        {/* <List.Item title="Placeholder project 2" /> */}
+                        {myProjects.map((myProject, i) => (
+                            <ListItem key={i}
+                                bottomDivider
+                                onLongPress={() => editDelete(myProject)}
+                                onPress={() => navigation.navigate("Home", { userId: userId, apiName: apiName, path: path, projectId: myProject['project_id'] })}>
+                                <ListItem.Content>
+                                    <ListItem.Title>{myProject.project_name}</ListItem.Title>
+                                </ListItem.Content>
+                                <ListItem.Chevron />
+                            </ListItem>
+                        ))
+                        }
                     </List.Accordion>
                     <List.Accordion title="Shared with me" expanded={expanded} onPress={handlePress}>
                         {sharedProjects.map((sharedProject, i) => (
@@ -153,7 +176,6 @@ const Project = ({ navigation }) => {
                         }
                     </List.Accordion>
                 </List.Section>
-
             </ScrollView>
             <View>
                 <Button title='Add new project' style={styles.button} onPress={toggleOverlay} />
@@ -162,7 +184,7 @@ const Project = ({ navigation }) => {
                 <Input placeholder='Project name'
                     onChangeText={onChangeTitle}
                     value={title} />
-                <Button title='Done' onPress={addProject} />
+                <Button title='Done' onPress={() => addProject(title)} />
             </Overlay>
         </View>
     )

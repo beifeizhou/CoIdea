@@ -37,11 +37,43 @@ Amplify.configure({
     }
 });
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({ navigation, route }) => {
     const apiName = 'codieapy'
     const myInit = {}
     const [userId, setUserId] = useState(null)
     const [checkUser, setCheckUser] = useState(null)
+    const [jsonObj, setJsonObj] = useState(
+        {
+            user_id: null,
+            info: {
+                email: null,
+                projects: []
+            }
+        }
+    )
+    const [project, setProject] = useState(
+        {
+            project_id: null,
+            project_name: null,
+            is_mine: null,
+            background: null,
+            research: null,
+            roadmap: null,
+            events: []
+        }
+    )
+
+
+    useEffect(() => {
+        API.get(apiName, path, myInit)
+            .then(res => {
+                if (res != null) {
+                    setJsonObj(res)
+                    setProject(res['info']['projects'].filter((proj) => proj.project_id == projectId)[0])
+                }
+            })
+    }, [])
+
     useEffect(() => {
         Auth.currentUserInfo()
             .then((data) => { setUserId(data.id); console.log(userId) })
@@ -83,6 +115,11 @@ const HomeScreen = ({ navigation }) => {
     console.log(userId)
     console.log(path)
 
+    useEffect(() => {
+        console.log(project.project_name)
+        navigation.setOptions(title = project.project_name)
+    }, [project])
+
     return (<View style={styles.homeContainer}>
         {list.map((item, i) => (<TouchableOpacity
             key={i}
@@ -103,32 +140,6 @@ const HomeScreen = ({ navigation }) => {
                         navigation.navigate('Roadmap', { userId: userId, apiName: apiName, path: path, screenName: 'roadmap' });
                         break;
 
-                }
-            }}
-        >
-            <Image source={item.iconImage} style={styles.iconImage}></Image>
-            <Text>{item.title}</Text>
-        </TouchableOpacity>))}
-    </View>)
-}
-
-// 新界面
-const HomeScreen2 = ({ navigation }) => {
-    return (<View style={styles.homeContainer}>
-        {list.map((item, i) => (<TouchableOpacity
-            key={i}
-            activeOpacity={0.5}
-            style={styles.gridBox}
-            onPress={() => {
-                switch (item.title) {
-                    case 'Background':
-                        navigation.navigate('Background');
-                        break;
-                    case 'Timeline':
-                        navigation.navigate('TimelineScreen');
-                        break;
-                    default:
-                        navigation.navigate('Demo');
                 }
             }}
         >
